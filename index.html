@@ -765,486 +765,734 @@
             </div>
          </main>
       </div>
-      <script>
-         // ── DATA ───────────────────────────────────────────────────────────
-         // Each bullet is now an object: { text, enabled }
-         let data = {
-           name: "Kalpana",
-           phone: "+91-9389509742",
-           email: "kalpanakathait11@gmail.com",
-           emailClickable: true,
-           github:   { label: "KmKalpana",         url: "https://github.com/KmKalpana" },
-           linkedin: { label: "linkedin/kalpana",  url: "https://linkedin.com/in/kalpana" },
-           portfolio: { label: "", url: "" },
-           showSummary: true,
-           showAchievements: true,
-           showInternship: true,
-           summary: "Software Engineer with nearly 2 years of full-time experience building and debugging production software across cross-platform environments. Skilled in C/C++, JavaScript, and TypeScript with a strong foundation in software engineering concepts, data structures, and algorithms. Experienced in developing software solutions, writing technical documentation, troubleshooting defects, and collaborating with internal stakeholders to gather and clarify requirements.",
-           skills: [
-             { label: "Languages",              items: ["C/C++", "JavaScript", "TypeScript", "Core Java"] },
-             { label: "Frameworks & Libraries", items: ["React Native", "React.js", "Redux", "Next.js", "Angular", "Vue.js", "Phaser.js", "Astro", "HTML5", "CSS3", "SCSS", "Tailwind CSS", "Material UI", "Bootstrap"] },
-             { label: "Tools & Platforms",      items: ["Git", "JIRA", "VS Code", "Firebase", "Linux", "Selenium IDE"] },
-             { label: "CS Fundamentals",        items: ["Data Structures & Algorithms", "DBMS", "Computer Networks", "Operating Systems", "Low Level Design"] }
-           ],
-           jobs: [
-             {
-               title: "Application Engineer", company: "Flipkart",
-               location: "Bangalore, India", dates: "Aug 2024 – May 2026",
-               type: "full-time",
-               bullets: [
-                 { text: "Designed and developed reusable UI components from scratch for an AI-based shopping application (SLAP), including Styledrops, Social Finds, Conversation History, and Checkout flows, using React Native with API integration.", enabled: true },
-                 { text: "Built the Offers UI on the product page with lead and contract flows, integrating backend APIs and writing test procedures to validate functionality.", enabled: true },
-                 { text: "Diagnosed and resolved cross-platform bugs on Android and iOS, including bottom sheet scrolling issues and location permission flows, ensuring consistent behavior and performance across both platforms.", enabled: true },
-                 { text: "Developed interactive Spin the Wheel gaming UI using Phaser.js; wrote unit tests to verify functionality and reliability.", enabled: true },
-                 { text: "Implemented a watcher feature in Firedrops tools using JavaScript to monitor live challenges, improving performance and system reliability.", enabled: true },
-                 { text: "Monitored Flipkart APIs and Scale3D during high-traffic events (Big Billion Days), proactively troubleshooting live issues to ensure system stability.", enabled: true },
-                 { text: "Collaborated with internal stakeholders (PMs and team leads) to gather requirements, clarify scope, and document technical decisions for multiple features.", enabled: true }
-               ]
-             },
-             {
-               title: "Frontend Developer Intern", company: "Aquera",
-               location: "Bangalore, India", dates: "Mar 2024 – Aug 2024",
-               type: "internship",
-               bullets: [
-                 { text: "Built dynamic components for an Asset Management System using Angular, enabling efficient tracking and management workflows.", enabled: true },
-                 { text: "Designed an Access Request Module to automate provisioning task workflows, enforce access controls, and reduce operational overhead.", enabled: true },
-                 { text: "Modernized the Adminui-Facelift by updating the visual design and usability of outdated UI elements, improving the overall user experience.", enabled: true }
-               ]
-             },
-             {
-               title: "Software Engineer Intern", company: "Economize, Inc.",
-               location: "Remote", dates: "Mar 2023 – Nov 2023",
-               type: "internship",
-               bullets: [
-                 { text: "Redesigned and built responsive frontend pages using Vue.js and Tailwind CSS, improving UI consistency and layout responsiveness.", enabled: true },
-                 { text: "Integrated Strapi CMS for data fetching and management, streamlining content retrieval in the frontend application.", enabled: true },
-                 { text: "Identified and resolved website bugs; conducted functional testing using Selenium IDE to verify fixes and improve software reliability.", enabled: true }
-               ]
-             },
-             {
-               title: "Web Development Intern", company: "Nifty Zone Pte Ltd",
-               location: "Remote", dates: "Sept 2022 – Nov 2022",
-               type: "internship",
-               bullets: [
-                 { text: "Maintained and improved a responsive blog website using React, Next.js, Astro, Tailwind CSS, and Chakra UI.", enabled: true }
-               ]
-             }
-           ],
-           education: {
-             degree: "Bachelor of Technology", major: "Computer Science & Engineering",
-             university: "Graphic Era Hill University, Dehradun", cgpa: "8.28", dates: "2020 – 2024"
-           },
-           achievements: [
-             { text: "Selected as Google Women's Engineer 2021 Scholar — ranked in the Top 200 among 27,000+ applicants.", enabled: true },
-             { text: "Participated in Hacktoberfest 2022, contributing to open-source web development projects.", enabled: true }
-           ]
-         };
-         
-         // ── DRAG STATE ─────────────────────────────────────────────────────
-         let dragSrc = null; // { jobIdx, bulletIdx }
-         
-         // ── TAB ────────────────────────────────────────────────────────────
-         function switchTab(name, el) {
-           document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-           document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-           el.classList.add('active');
-           document.getElementById('panel-' + name).classList.add('active');
-         }
-         
-         // ── POPULATE ───────────────────────────────────────────────────────
-         function populateSidebar() {
-           document.getElementById('f-name').value      = data.name;
-           document.getElementById('f-phone').value     = data.phone;
-           document.getElementById('f-email').value             = data.email;
-           document.getElementById('f-email-clickable').checked = data.emailClickable !== false;
-           document.getElementById('f-github-label').value    = data.github.label || '';
-           document.getElementById('f-github-url').value      = data.github.url   || '';
-           document.getElementById('f-linkedin-label').value  = data.linkedin.label || '';
-           document.getElementById('f-linkedin-url').value    = data.linkedin.url   || '';
-           document.getElementById('f-portfolio-label').value = data.portfolio.label || '';
-           document.getElementById('f-portfolio-url').value   = data.portfolio.url   || '';
-           document.getElementById('f-summary').value   = data.summary;
-           document.getElementById('f-summary-toggle').checked      = data.showSummary;
-           document.getElementById('f-achievements-toggle').checked = data.showAchievements !== false;
-           document.getElementById('f-internship-toggle').checked   = data.showInternship !== false;
-           document.getElementById('f-degree').value    = data.education.degree;
-           document.getElementById('f-major').value     = data.education.major;
-           document.getElementById('f-university').value= data.education.university;
-           document.getElementById('f-cgpa').value      = data.education.cgpa;
-           document.getElementById('f-edu-dates').value = data.education.dates;
-           renderJobCards();
-           renderAchievementCards();
-           renderSkillCards();
-         }
-         
-         // ── JOB CARDS ─────────────────────────────────────────────────────
-         function renderJobCards() {
-           const list = document.getElementById('jobs-list');
-           list.innerHTML = '';
-           data.jobs.forEach((job, i) => {
-             const card = document.createElement('div');
-             card.className = 'card';
-             card.innerHTML = `
-               <div class="card-header">
-                 <span class="card-title">${esc(job.company) || 'Job ' + (i+1)}</span>
-                 <button class="btn-remove" onclick="removeJob(${i})" title="Remove job">✕</button>
-               </div>
-               <div class="field"><label>Title</label><input value="${esc(job.title)}" oninput="data.jobs[${i}].title=this.value;render();updateCardTitle(${i})" /></div>
-               <div class="field"><label>Company</label><input value="${esc(job.company)}" oninput="data.jobs[${i}].company=this.value;render();updateCardTitle(${i})" /></div>
-               <div class="field"><label>Location</label><input value="${esc(job.location)}" oninput="data.jobs[${i}].location=this.value;render()" /></div>
-               <div class="field"><label>Dates</label><input value="${esc(job.dates)}" oninput="data.jobs[${i}].dates=this.value;render()" /></div>
-               <div class="field">
-                 <label>Employment Type</label>
-                 <select style="width:100%;background:#2d3748;border:1px solid #4a5568;color:#e2e8f0;padding:8px 10px;border-radius:6px;font-size:13px;font-family:inherit;"
-                   onchange="data.jobs[${i}].type=this.value;render()">
-                   <option value="full-time"  ${(job.type||'full-time')==='full-time'  ? 'selected' : ''}>Full-Time</option>
-                   <option value="internship" ${(job.type||'full-time')==='internship'  ? 'selected' : ''}>Internship</option>
-                 </select>
-               </div>
-               <div class="field">
-                 <label>Bullet Points <span style="color:#4a5568;font-weight:400;text-transform:none;font-size:10px;">— drag ⠿ to reorder</span></label>
-                 <div id="bullets-${i}" class="bullets-container"></div>
-                 <button class="btn-add-bullet" onclick="addBullet(${i})">+ add bullet</button>
-               </div>`;
-             list.appendChild(card);
-             renderBullets(i);
-           });
-         }
-         
-         function updateCardTitle(i) {
-           const card = document.getElementById('jobs-list').children[i];
-           if (card) card.querySelector('.card-title').textContent = data.jobs[i].company || 'Job ' + (i+1);
-         }
-         
-         // ── BULLET ROWS (draggable) ────────────────────────────────────────
-         function renderBullets(i) {
-           const container = document.getElementById(`bullets-${i}`);
-           if (!container) return;
-           container.innerHTML = '';
-           data.jobs[i].bullets.forEach((b, j) => {
-             const row = document.createElement('div');
-             row.className = 'bullet-item' + (b.enabled ? '' : ' disabled-bullet');
-             row.draggable = true;
-             row.dataset.job = i;
-             row.dataset.bullet = j;
-         
-             // auto-grow textarea helper embedded via onInput
-             row.innerHTML = `
-               <span class="drag-handle" title="Drag to reorder">⠿</span>
-               <textarea
-                 rows="2"
-                 oninput="data.jobs[${i}].bullets[${j}].text=this.value;autoGrow(this);render()"
-                 onfocus="autoGrow(this)"
-               >${esc(b.text)}</textarea>
-               <div class="bullet-actions">
-                 <button class="btn-toggle-bullet ${b.enabled ? 'is-enabled' : 'is-disabled'}"
-                   onclick="toggleBullet(${i},${j})"
-                   title="${b.enabled ? 'Disable this bullet (hide from resume)' : 'Enable this bullet (show on resume)'}">
-                   ${b.enabled ? 'ON' : 'OFF'}
-                 </button>
-                 <button class="btn-remove" onclick="removeBullet(${i},${j})" title="Delete bullet">✕</button>
-               </div>`;
-         
-             // Drag events
-             row.addEventListener('dragstart', e => {
-               dragSrc = { jobIdx: i, bulletIdx: j };
-               row.classList.add('dragging');
-               e.dataTransfer.effectAllowed = 'move';
-             });
-             row.addEventListener('dragend', () => {
-               row.classList.remove('dragging');
-               document.querySelectorAll('.bullet-item').forEach(r => r.classList.remove('drag-over'));
-             });
-             row.addEventListener('dragover', e => {
-               e.preventDefault();
-               e.dataTransfer.dropEffect = 'move';
-               document.querySelectorAll('.bullet-item').forEach(r => r.classList.remove('drag-over'));
-               row.classList.add('drag-over');
-             });
-             row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
-             row.addEventListener('drop', e => {
-               e.preventDefault();
-               row.classList.remove('drag-over');
-               if (!dragSrc) return;
-               const { jobIdx: si, bulletIdx: sj } = dragSrc;
-               const di = parseInt(row.dataset.job);
-               const dj = parseInt(row.dataset.bullet);
-               if (si !== di || sj === dj) return; // only reorder within same job
-               const bullets = data.jobs[si].bullets;
-               const [moved] = bullets.splice(sj, 1);
-               // if removing an earlier index, the target index shifts left by 1
-               const insertAt = (sj < dj) ? (dj - 1) : dj;
-               bullets.splice(insertAt, 0, moved);
-               dragSrc = null;
-               renderBullets(si);
-               render();
-             });
-         
-             container.appendChild(row);
-             // auto-grow on load
-             const ta = row.querySelector('textarea');
-             setTimeout(() => autoGrow(ta), 0);
-           });
-         }
-         
-         function autoGrow(el) {
-           el.style.height = 'auto';
-           el.style.height = el.scrollHeight + 'px';
-         }
-         
-         function toggleBullet(i, j) {
-           data.jobs[i].bullets[j].enabled = !data.jobs[i].bullets[j].enabled;
-           renderBullets(i);
-           render();
-         }
-         function addBullet(i) {
-           data.jobs[i].bullets.push({ text: '', enabled: true });
-           renderBullets(i); render();
-         }
-         function removeBullet(i, j) {
-           data.jobs[i].bullets.splice(j, 1);
-           renderBullets(i); render();
-         }
-         function addJob() {
-           data.jobs.push({ title: 'Job Title', company: 'Company', location: 'Location', dates: 'Month YYYY – Month YYYY', type: 'full-time', bullets: [{ text: '', enabled: true }] });
-           renderJobCards(); render();
-         }
-         function removeJob(i) {
-           data.jobs.splice(i, 1); renderJobCards(); render();
-         }
-         
-         // ── SKILLS ────────────────────────────────────────────────────────
-         function renderSkillCards() {
-           const list = document.getElementById('skills-list');
-           list.innerHTML = '';
-           data.skills.forEach((cat, ci) => {
-             const card = document.createElement('div');
-             card.className = 'skill-card';
-             card.innerHTML = `
-               <div class="skill-card-header">
-                 <input class="skill-cat-input" value="${esc(cat.label)}"
-                   oninput="data.skills[${ci}].label=this.value;render()" title="Rename category" />
-                 <button class="btn-remove" onclick="removeSkillCategory(${ci})">✕</button>
-               </div>
-               <div class="skill-items" id="skill-items-${ci}">
-                 ${cat.items.map((item, ii) => `
-                   <span class="skill-tag">
-                     <span>${esc(item)}</span>
-                     <button onclick="removeSkillItem(${ci},${ii})">✕</button>
-                   </span>`).join('')}
-               </div>
-               <div class="skill-add-row">
-                 <input id="skill-new-${ci}" placeholder="Add skill..." onkeydown="if(event.key==='Enter')addSkillItem(${ci})" />
-                 <button onclick="addSkillItem(${ci})">Add</button>
-               </div>`;
-             list.appendChild(card);
-           });
-         }
-         function addSkillCategory()      { data.skills.push({ label: 'New Category', items: [] }); renderSkillCards(); render(); }
-         function removeSkillCategory(ci) { data.skills.splice(ci,1); renderSkillCards(); render(); }
-         function addSkillItem(ci) {
-           const inp = document.getElementById(`skill-new-${ci}`);
-           const val = inp.value.trim(); if (!val) return;
-           data.skills[ci].items.push(val); inp.value = '';
-           renderSkillCards(); render();
-         }
-         function removeSkillItem(ci, ii) { data.skills[ci].items.splice(ii,1); renderSkillCards(); render(); }
-         
-         // ── ACHIEVEMENTS ──────────────────────────────────────────────────
-         function renderAchievementCards() {
-           const list = document.getElementById('achievements-list');
-           list.innerHTML = '';
-           data.achievements.forEach((a, i) => {
-             const row = document.createElement('div');
-             row.className = 'bullet-item' + (a.enabled ? '' : ' disabled-bullet');
-             row.style.marginBottom = '6px';
-             row.innerHTML = `
-               <textarea rows="2"
-                 style="flex:1;background:transparent;border:none;color:${a.enabled ? '#e2e8f0' : '#718096'};font-size:12px;font-family:inherit;line-height:1.45;resize:none;padding:4px 2px;outline:none;min-height:36px;overflow:hidden;${a.enabled ? '' : 'text-decoration:line-through;'}"
-                 oninput="data.achievements[${i}].text=this.value;autoGrow(this);render()"
-                 onfocus="autoGrow(this)"
-               >${esc(a.text)}</textarea>
-               <div class="bullet-actions">
-                 <button class="btn-toggle-bullet ${a.enabled ? 'is-enabled' : 'is-disabled'}"
-                   onclick="toggleAchievement(${i})"
-                   title="${a.enabled ? 'Hide from resume' : 'Show on resume'}">
-                   ${a.enabled ? 'ON' : 'OFF'}
-                 </button>
-                 <button class="btn-remove" onclick="removeAchievement(${i})" title="Delete">✕</button>
-               </div>`;
-             list.appendChild(row);
-             setTimeout(() => autoGrow(row.querySelector('textarea')), 0);
-           });
-         }
-         function toggleAchievement(i) { data.achievements[i].enabled = !data.achievements[i].enabled; renderAchievementCards(); render(); }
-         function addAchievement()     { data.achievements.push({ text: '', enabled: true }); renderAchievementCards(); render(); }
-         function removeAchievement(i) { data.achievements.splice(i,1); renderAchievementCards(); render(); }
-         
-         // ── SYNC ──────────────────────────────────────────────────────────
-         function syncBasics() {
-           data.name        = document.getElementById('f-name').value;
-           data.phone       = document.getElementById('f-phone').value;
-           data.email           = document.getElementById('f-email').value;
-           data.emailClickable  = document.getElementById('f-email-clickable').checked;
-           data.github   = { label: document.getElementById('f-github-label').value,   url: document.getElementById('f-github-url').value };
-           data.linkedin = { label: document.getElementById('f-linkedin-label').value, url: document.getElementById('f-linkedin-url').value };
-           data.portfolio= { label: document.getElementById('f-portfolio-label').value,url: document.getElementById('f-portfolio-url').value };
-           data.summary     = document.getElementById('f-summary').value;
-           data.showSummary      = document.getElementById('f-summary-toggle').checked;
-           data.showAchievements = document.getElementById('f-achievements-toggle').checked;
-           data.showInternship   = document.getElementById('f-internship-toggle').checked;
-           data.education.degree     = document.getElementById('f-degree').value;
-           data.education.major      = document.getElementById('f-major').value;
-           data.education.university = document.getElementById('f-university').value;
-           data.education.cgpa       = document.getElementById('f-cgpa').value;
-           data.education.dates      = document.getElementById('f-edu-dates').value;
-         }
-         
-         // ── RENDER RESUME ─────────────────────────────────────────────────
-         function render() {
-           syncBasics();
-         
-           document.getElementById('summary-field').classList.toggle('toggle-disabled', !data.showSummary);
-           document.getElementById('r-name').textContent = data.name;
-         
-           const emailPart = data.email
-             ? (data.emailClickable
-                 ? `<a href="mailto:${esc(data.email)}" style="color:#1F4E79;text-decoration:none;">${esc(data.email)}</a>`
-                 : esc(data.email))
-             : '';
-           let contact = [data.phone, emailPart].filter(Boolean).join('  |  ');
-           if (data.github.url) {
-             contact += `  |  <a href="${esc(data.github.url)}" style="color:#1F4E79;text-decoration:none;">${esc(data.github.label || data.github.url)}</a>`;
-           } else if (data.github.label) {
-             contact += `  |  ${esc(data.github.label)}`;
-           }
-           if (data.linkedin.url) {
-             contact += `  |  <a href="${esc(data.linkedin.url)}" style="color:#1F4E79;text-decoration:none;">${esc(data.linkedin.label || data.linkedin.url)}</a>`;
-           } else if (data.linkedin.label) {
-             contact += `  |  ${esc(data.linkedin.label)}`;
-           }
-           if (data.portfolio.url) {
-             contact += `  |  <a href="${esc(data.portfolio.url)}" style="color:#1F4E79;text-decoration:none;">${esc(data.portfolio.label || data.portfolio.url)}</a>`;
-           } else if (data.portfolio.label) {
-             contact += `  |  ${esc(data.portfolio.label)}`;
-           }
-           document.getElementById('r-contact').innerHTML = contact;
-         
-           const sb = document.getElementById('r-summary-block');
-           if (data.showSummary && data.summary.trim()) {
-             sb.style.display = '';
-             document.getElementById('r-summary').textContent = data.summary;
-           } else {
-             sb.style.display = 'none';
-           }
-         
-           document.getElementById('r-skills').innerHTML = data.skills
-             .filter(cat => cat.items.length > 0)
-             .map(cat => `<div class="r-skill-row"><span class="r-skill-label">${esc(cat.label)}: </span>${cat.items.map(esc).join(', ')}</div>`)
-             .join('');
-         
-           // Split jobs into full-time and internship
-           function jobHTML(job) {
-             return `
-             <div class="r-job">
-               <div class="r-job-header">
-                 <div>
-                   <span class="r-job-title">${esc(job.title)}</span>
-                   <span style="color:#555;font-size:8.5pt"> &nbsp;|&nbsp; </span>
-                   <span class="r-company">${esc(job.company)}</span>
-                 </div>
-                 <div class="r-job-meta">${esc(job.location)}  |  ${esc(job.dates)}</div>
-               </div>
-               <ul class="r-bullets">
-                 ${job.bullets.filter(b => b.enabled && b.text.trim()).map(b => `<li>${esc(b.text)}</li>`).join('')}
-               </ul>
-             </div>`;
-           }
-         
-           const fulltimeJobs   = data.jobs.filter(j => (j.type || 'full-time') === 'full-time');
-           const internshipJobs = data.jobs.filter(j => (j.type || 'full-time') === 'internship');
-         
-           const ftBlock = document.getElementById('r-fulltime-block');
-           const inBlock = document.getElementById('r-internship-block');
-         
-           if (fulltimeJobs.length > 0) {
-             ftBlock.style.display = '';
-             document.getElementById('r-fulltime').innerHTML = fulltimeJobs.map(jobHTML).join('');
-           } else {
-             ftBlock.style.display = 'none';
-           }
-         
-           if (internshipJobs.length > 0 && data.showInternship) {
-             inBlock.style.display = '';
-             document.getElementById('r-internship').innerHTML = internshipJobs.map(jobHTML).join('');
-           } else {
-             inBlock.style.display = 'none';
-           }
-         
-           const edu = data.education;
-           document.getElementById('r-education').innerHTML = `
-             <div class="r-edu">
-               <div class="r-edu-header">
-                 <span class="r-edu-degree">${esc(edu.degree)} – ${esc(edu.major)}</span>
-                 <span class="r-edu-dates">${esc(edu.dates)}</span>
-               </div>
-               <div class="r-edu-school">${esc(edu.university)}${edu.cgpa ? '  |  CGPA: ' + edu.cgpa : ''}</div>
-             </div>`;
-         
-           document.getElementById('achievements-field').classList.toggle('toggle-disabled', !data.showAchievements);
-         
-           const activeAchievements = data.achievements.filter(a => a.enabled && a.text.trim());
-           const achBlock = document.getElementById('r-achievements-block');
-           if (data.showAchievements && activeAchievements.length > 0) {
-             achBlock.style.display = '';
-             document.getElementById('r-achievements').innerHTML = activeAchievements.map(a => `<li>${esc(a.text)}</li>`).join('');
-           } else {
-             achBlock.style.display = 'none';
-           }
-         }
-         
-         // ── IMPORT / EXPORT ───────────────────────────────────────────────
-         function exportJSON() {
-           syncBasics();
-           const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-           const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-           a.download = 'resume_data.json'; a.click();
-         }
-         function importJSON(e) {
-           const file = e.target.files[0]; if (!file) return;
-           const reader = new FileReader();
-           reader.onload = ev => {
-             try {
-               const parsed = JSON.parse(ev.target.result);
-               // migrate old string-bullet format
-               if (typeof parsed.github   === 'string') parsed.github   = { label: parsed.github,   url: 'https://' + parsed.github };
-               if (typeof parsed.linkedin === 'string') parsed.linkedin = { label: parsed.linkedin, url: 'https://' + parsed.linkedin };
-               if (typeof parsed.portfolio=== 'string') parsed.portfolio= { label: parsed.portfolio, url: parsed.portfolio };
-               if (parsed.jobs) {
-                 parsed.jobs.forEach(job => {
-                   job.bullets = job.bullets.map(b =>
-                     typeof b === 'string' ? { text: b, enabled: true } : b
-                   );
-                 });
-               }
-               if (parsed.achievements) {
-                 parsed.achievements = parsed.achievements.map(a =>
-                   typeof a === 'string' ? { text: a, enabled: true } : a
-                 );
-               }
-               data = parsed;
-               populateSidebar(); render();
-             } catch { alert('Invalid JSON file.'); }
-           };
-           reader.readAsText(file);
-         }
-         
-         function esc(str) {
-           return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-         }
-         
-         populateSidebar();
-         render();
-      </script>
+     <script>
+  // ── LOCAL STORAGE ─────────────────────────────────────────────────────
+  const STORAGE_KEY = "resumeEditorData";
+
+  function saveToLocalStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function loadFromLocalStorage() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+      const parsed = JSON.parse(saved);
+      data = normalizeImportedData(parsed);
+    } catch (err) {
+      console.error("Failed to load saved resume data from localStorage", err);
+    }
+  }
+
+  function clearSavedData() {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+
+  // ── DATA ─────────────────────────────────────────────────────────────
+  let data = {
+    name: "Kalpana",
+    phone: "+91-9389509742",
+    email: "kalpanakathait11@gmail.com",
+    emailClickable: true,
+    github:   { label: "KmKalpana",        url: "https://github.com/KmKalpana" },
+    linkedin: { label: "linkedin/kalpana", url: "https://linkedin.com/in/kalpana" },
+    portfolio:{ label: "", url: "" },
+
+    showSummary: true,
+    showAchievements: true,
+    showInternship: true,
+
+    summary:
+      "Software Engineer with nearly 2 years of full-time experience building and debugging production software across cross-platform environments. Skilled in C/C++, JavaScript, and TypeScript with a strong foundation in software engineering concepts, data structures, and algorithms. Experienced in developing software solutions, writing technical documentation, troubleshooting defects, and collaborating with internal stakeholders to gather and clarify requirements.",
+
+    skills: [
+      { label: "Languages", items: ["C/C++", "JavaScript", "TypeScript", "Core Java"] },
+      { label: "Frameworks & Libraries", items: ["React Native", "React.js", "Redux", "Next.js", "Angular", "Vue.js", "Phaser.js", "Astro", "HTML5", "CSS3", "SCSS", "Tailwind CSS", "Material UI", "Bootstrap"] },
+      { label: "Tools & Platforms", items: ["Git", "JIRA", "VS Code", "Firebase", "Linux", "Selenium IDE"] },
+      { label: "CS Fundamentals", items: ["Data Structures & Algorithms", "DBMS", "Computer Networks", "Operating Systems", "Low Level Design"] }
+    ],
+
+    jobs: [
+      {
+        title: "Application Engineer",
+        company: "Flipkart",
+        location: "Bangalore, India",
+        dates: "Aug 2024 – May 2026",
+        type: "full-time",
+        bullets: [
+          { text: "Designed and developed reusable UI components from scratch for an AI-based shopping application (SLAP), including Styledrops, Social Finds, Conversation History, and Checkout flows, using React Native with API integration.", enabled: true },
+          { text: "Built the Offers UI on the product page with lead and contract flows, integrating backend APIs and writing test procedures to validate functionality.", enabled: true },
+          { text: "Diagnosed and resolved cross-platform bugs on Android and iOS, including bottom sheet scrolling issues and location permission flows, ensuring consistent behavior and performance across both platforms.", enabled: true },
+          { text: "Developed interactive Spin the Wheel gaming UI using Phaser.js; wrote unit tests to verify functionality and reliability.", enabled: true },
+          { text: "Implemented a watcher feature in Firedrops tools using JavaScript to monitor live challenges, improving performance and system reliability.", enabled: true },
+          { text: "Monitored Flipkart APIs and Scale3D during high-traffic events (Big Billion Days), proactively troubleshooting live issues to ensure system stability.", enabled: true },
+          { text: "Collaborated with internal stakeholders (PMs and team leads) to gather requirements, clarify scope, and document technical decisions for multiple features.", enabled: true }
+        ]
+      },
+      {
+        title: "Frontend Developer Intern",
+        company: "Aquera",
+        location: "Bangalore, India",
+        dates: "Mar 2024 – Aug 2024",
+        type: "internship",
+        bullets: [
+          { text: "Built dynamic components for an Asset Management System using Angular, enabling efficient tracking and management workflows.", enabled: true },
+          { text: "Designed an Access Request Module to automate provisioning task workflows, enforce access controls, and reduce operational overhead.", enabled: true },
+          { text: "Modernized the Adminui-Facelift by updating the visual design and usability of outdated UI elements, improving the overall user experience.", enabled: true }
+        ]
+      },
+      {
+        title: "Software Engineer Intern",
+        company: "Economize, Inc.",
+        location: "Remote",
+        dates: "Mar 2023 – Nov 2023",
+        type: "internship",
+        bullets: [
+          { text: "Redesigned and built responsive frontend pages using Vue.js and Tailwind CSS, improving UI consistency and layout responsiveness.", enabled: true },
+          { text: "Integrated Strapi CMS for data fetching and management, streamlining content retrieval in the frontend application.", enabled: true },
+          { text: "Identified and resolved website bugs; conducted functional testing using Selenium IDE to verify fixes and improve software reliability.", enabled: true }
+        ]
+      },
+      {
+        title: "Web Development Intern",
+        company: "Nifty Zone Pte Ltd",
+        location: "Remote",
+        dates: "Sept 2022 – Nov 2022",
+        type: "internship",
+        bullets: [
+          { text: "Maintained and improved a responsive blog website using React, Next.js, Astro, Tailwind CSS, and Chakra UI.", enabled: true }
+        ]
+      }
+    ],
+
+    education: {
+      degree: "Bachelor of Technology",
+      major: "Computer Science & Engineering",
+      university: "Graphic Era Hill University, Dehradun",
+      cgpa: "8.28",
+      dates: "2020 – 2024"
+    },
+
+    achievements: [
+      { text: "Selected as Google Women's Engineer 2021 Scholar — ranked in the Top 200 among 27,000+ applicants.", enabled: true },
+      { text: "Participated in Hacktoberfest 2022, contributing to open-source web development projects.", enabled: true }
+    ]
+  };
+
+  // ── HELPERS ──────────────────────────────────────────────────────────
+  function esc(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function normalizeImportedData(parsed) {
+    const cloned = structuredClone(parsed);
+
+    // Defaults for missing top-level keys
+    cloned.name = cloned.name || "";
+    cloned.phone = cloned.phone || "";
+    cloned.email = cloned.email || "";
+    cloned.emailClickable = cloned.emailClickable !== false;
+    cloned.showSummary = cloned.showSummary !== false;
+    cloned.showAchievements = cloned.showAchievements !== false;
+    cloned.showInternship = cloned.showInternship !== false;
+    cloned.summary = cloned.summary || "";
+
+    // social links migration / safety
+    if (typeof cloned.github === "string") {
+      cloned.github = { label: cloned.github, url: cloned.github.startsWith("http") ? cloned.github : `https://${cloned.github}` };
+    }
+    if (!cloned.github) cloned.github = { label: "", url: "" };
+
+    if (typeof cloned.linkedin === "string") {
+      cloned.linkedin = { label: cloned.linkedin, url: cloned.linkedin.startsWith("http") ? cloned.linkedin : `https://${cloned.linkedin}` };
+    }
+    if (!cloned.linkedin) cloned.linkedin = { label: "", url: "" };
+
+    if (typeof cloned.portfolio === "string") {
+      cloned.portfolio = { label: cloned.portfolio, url: cloned.portfolio };
+    }
+    if (!cloned.portfolio) cloned.portfolio = { label: "", url: "" };
+
+    // education safety
+    if (!cloned.education) {
+      cloned.education = { degree: "", major: "", university: "", cgpa: "", dates: "" };
+    } else {
+      cloned.education.degree = cloned.education.degree || "";
+      cloned.education.major = cloned.education.major || "";
+      cloned.education.university = cloned.education.university || "";
+      cloned.education.cgpa = cloned.education.cgpa || "";
+      cloned.education.dates = cloned.education.dates || "";
+    }
+
+    // skills migration
+    if (!Array.isArray(cloned.skills)) cloned.skills = [];
+    cloned.skills = cloned.skills.map(cat => ({
+      label: cat?.label || "New Category",
+      items: Array.isArray(cat?.items) ? cat.items : []
+    }));
+
+    // jobs migration
+    if (!Array.isArray(cloned.jobs)) cloned.jobs = [];
+    cloned.jobs = cloned.jobs.map(job => ({
+      title: job?.title || "Job Title",
+      company: job?.company || "Company",
+      location: job?.location || "Location",
+      dates: job?.dates || "Month YYYY – Month YYYY",
+      type: job?.type || "full-time",
+      bullets: Array.isArray(job?.bullets)
+        ? job.bullets.map(b => typeof b === "string" ? { text: b, enabled: true } : { text: b.text || "", enabled: b.enabled !== false })
+        : [{ text: "", enabled: true }]
+    }));
+
+    // achievements migration
+    if (!Array.isArray(cloned.achievements)) cloned.achievements = [];
+    cloned.achievements = cloned.achievements.map(a =>
+      typeof a === "string" ? { text: a, enabled: true } : { text: a.text || "", enabled: a.enabled !== false }
+    );
+
+    return cloned;
+  }
+
+  // ── DRAG STATE ───────────────────────────────────────────────────────
+  let dragSrc = null; // { jobIdx, bulletIdx }
+
+  // ── TAB ──────────────────────────────────────────────────────────────
+  function switchTab(name, el) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    el.classList.add("active");
+    document.getElementById("panel-" + name).classList.add("active");
+  }
+
+  // ── POPULATE SIDEBAR ────────────────────────────────────────────────
+  function populateSidebar() {
+    document.getElementById("f-name").value = data.name;
+    document.getElementById("f-phone").value = data.phone;
+    document.getElementById("f-email").value = data.email;
+    document.getElementById("f-email-clickable").checked = data.emailClickable !== false;
+
+    document.getElementById("f-github-label").value = data.github.label || "";
+    document.getElementById("f-github-url").value = data.github.url || "";
+    document.getElementById("f-linkedin-label").value = data.linkedin.label || "";
+    document.getElementById("f-linkedin-url").value = data.linkedin.url || "";
+    document.getElementById("f-portfolio-label").value = data.portfolio.label || "";
+    document.getElementById("f-portfolio-url").value = data.portfolio.url || "";
+
+    document.getElementById("f-summary").value = data.summary;
+    document.getElementById("f-summary-toggle").checked = data.showSummary;
+    document.getElementById("f-achievements-toggle").checked = data.showAchievements !== false;
+    document.getElementById("f-internship-toggle").checked = data.showInternship !== false;
+
+    document.getElementById("f-degree").value = data.education.degree;
+    document.getElementById("f-major").value = data.education.major;
+    document.getElementById("f-university").value = data.education.university;
+    document.getElementById("f-cgpa").value = data.education.cgpa;
+    document.getElementById("f-edu-dates").value = data.education.dates;
+
+    renderJobCards();
+    renderAchievementCards();
+    renderSkillCards();
+  }
+
+  // ── JOB CARDS ───────────────────────────────────────────────────────
+  function renderJobCards() {
+    const list = document.getElementById("jobs-list");
+    list.innerHTML = "";
+
+    data.jobs.forEach((job, i) => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="card-title">${esc(job.company) || "Job " + (i + 1)}</span>
+          <button class="btn-remove" onclick="removeJob(${i})" title="Remove job">✕</button>
+        </div>
+
+        <div class="field"><label>Title</label>
+          <input value="${esc(job.title)}" oninput="data.jobs[${i}].title=this.value;render();updateCardTitle(${i})" />
+        </div>
+
+        <div class="field"><label>Company</label>
+          <input value="${esc(job.company)}" oninput="data.jobs[${i}].company=this.value;render();updateCardTitle(${i})" />
+        </div>
+
+        <div class="field"><label>Location</label>
+          <input value="${esc(job.location)}" oninput="data.jobs[${i}].location=this.value;render()" />
+        </div>
+
+        <div class="field"><label>Dates</label>
+          <input value="${esc(job.dates)}" oninput="data.jobs[${i}].dates=this.value;render()" />
+        </div>
+
+        <div class="field">
+          <label>Employment Type</label>
+          <select
+            style="width:100%;background:#2d3748;border:1px solid #4a5568;color:#e2e8f0;padding:8px 10px;border-radius:6px;font-size:13px;font-family:inherit;"
+            onchange="data.jobs[${i}].type=this.value;render()"
+          >
+            <option value="full-time" ${(job.type || "full-time") === "full-time" ? "selected" : ""}>Full-Time</option>
+            <option value="internship" ${(job.type || "full-time") === "internship" ? "selected" : ""}>Internship</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Bullet Points <span style="color:#4a5568;font-weight:400;text-transform:none;font-size:10px;">— drag ⠿ to reorder</span></label>
+          <div id="bullets-${i}" class="bullets-container"></div>
+          <button class="btn-add-bullet" onclick="addBullet(${i})">+ add bullet</button>
+        </div>
+      `;
+
+      list.appendChild(card);
+      renderBullets(i);
+    });
+  }
+
+  function updateCardTitle(i) {
+    const card = document.getElementById("jobs-list").children[i];
+    if (card) {
+      card.querySelector(".card-title").textContent = data.jobs[i].company || "Job " + (i + 1);
+    }
+  }
+
+  // ── BULLETS ──────────────────────────────────────────────────────────
+  function renderBullets(i) {
+    const container = document.getElementById(`bullets-${i}`);
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    data.jobs[i].bullets.forEach((b, j) => {
+      const row = document.createElement("div");
+      row.className = "bullet-item" + (b.enabled ? "" : " disabled-bullet");
+      row.draggable = true;
+      row.dataset.job = i;
+      row.dataset.bullet = j;
+
+      row.innerHTML = `
+        <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <textarea
+          rows="2"
+          oninput="data.jobs[${i}].bullets[${j}].text=this.value;autoGrow(this);render()"
+          onfocus="autoGrow(this)"
+        >${esc(b.text)}</textarea>
+
+        <div class="bullet-actions">
+          <button
+            class="btn-toggle-bullet ${b.enabled ? "is-enabled" : "is-disabled"}"
+            onclick="toggleBullet(${i},${j})"
+            title="${b.enabled ? "Disable this bullet (hide from resume)" : "Enable this bullet (show on resume)"}"
+          >
+            ${b.enabled ? "ON" : "OFF"}
+          </button>
+
+          <button class="btn-remove" onclick="removeBullet(${i},${j})" title="Delete bullet">✕</button>
+        </div>
+      `;
+
+      row.addEventListener("dragstart", e => {
+        dragSrc = { jobIdx: i, bulletIdx: j };
+        row.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      row.addEventListener("dragend", () => {
+        row.classList.remove("dragging");
+        document.querySelectorAll(".bullet-item").forEach(r => r.classList.remove("drag-over"));
+      });
+
+      row.addEventListener("dragover", e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        document.querySelectorAll(".bullet-item").forEach(r => r.classList.remove("drag-over"));
+        row.classList.add("drag-over");
+      });
+
+      row.addEventListener("dragleave", () => row.classList.remove("drag-over"));
+
+      row.addEventListener("drop", e => {
+        e.preventDefault();
+        row.classList.remove("drag-over");
+        if (!dragSrc) return;
+
+        const { jobIdx: si, bulletIdx: sj } = dragSrc;
+        const di = parseInt(row.dataset.job);
+        const dj = parseInt(row.dataset.bullet);
+
+        if (si !== di || sj === dj) return;
+
+        const bullets = data.jobs[si].bullets;
+        const [moved] = bullets.splice(sj, 1);
+        const insertAt = sj < dj ? dj - 1 : dj;
+        bullets.splice(insertAt, 0, moved);
+
+        dragSrc = null;
+        renderBullets(si);
+        render();
+      });
+
+      container.appendChild(row);
+
+      const ta = row.querySelector("textarea");
+      setTimeout(() => autoGrow(ta), 0);
+    });
+  }
+
+  function autoGrow(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+
+  function toggleBullet(i, j) {
+    data.jobs[i].bullets[j].enabled = !data.jobs[i].bullets[j].enabled;
+    renderBullets(i);
+    render();
+  }
+
+  function addBullet(i) {
+    data.jobs[i].bullets.push({ text: "", enabled: true });
+    renderBullets(i);
+    render();
+  }
+
+  function removeBullet(i, j) {
+    data.jobs[i].bullets.splice(j, 1);
+    renderBullets(i);
+    render();
+  }
+
+  function addJob() {
+    data.jobs.push({
+      title: "Job Title",
+      company: "Company",
+      location: "Location",
+      dates: "Month YYYY – Month YYYY",
+      type: "full-time",
+      bullets: [{ text: "", enabled: true }]
+    });
+    renderJobCards();
+    render();
+  }
+
+  function removeJob(i) {
+    data.jobs.splice(i, 1);
+    renderJobCards();
+    render();
+  }
+
+  // ── SKILLS ───────────────────────────────────────────────────────────
+  function renderSkillCards() {
+    const list = document.getElementById("skills-list");
+    list.innerHTML = "";
+
+    data.skills.forEach((cat, ci) => {
+      const card = document.createElement("div");
+      card.className = "skill-card";
+
+      card.innerHTML = `
+        <div class="skill-card-header">
+          <input
+            class="skill-cat-input"
+            value="${esc(cat.label)}"
+            oninput="data.skills[${ci}].label=this.value;render()"
+            title="Rename category"
+          />
+          <button class="btn-remove" onclick="removeSkillCategory(${ci})">✕</button>
+        </div>
+
+        <div class="skill-items" id="skill-items-${ci}">
+          ${cat.items.map((item, ii) => `
+            <span class="skill-tag">
+              <span>${esc(item)}</span>
+              <button onclick="removeSkillItem(${ci},${ii})">✕</button>
+            </span>
+          `).join("")}
+        </div>
+
+        <div class="skill-add-row">
+          <input id="skill-new-${ci}" placeholder="Add skill..." onkeydown="if(event.key==='Enter')addSkillItem(${ci})" />
+          <button onclick="addSkillItem(${ci})">Add</button>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+  }
+
+  function addSkillCategory() {
+    data.skills.push({ label: "New Category", items: [] });
+    renderSkillCards();
+    render();
+  }
+
+  function removeSkillCategory(ci) {
+    data.skills.splice(ci, 1);
+    renderSkillCards();
+    render();
+  }
+
+  function addSkillItem(ci) {
+    const inp = document.getElementById(`skill-new-${ci}`);
+    const val = inp.value.trim();
+    if (!val) return;
+
+    data.skills[ci].items.push(val);
+    inp.value = "";
+    renderSkillCards();
+    render();
+  }
+
+  function removeSkillItem(ci, ii) {
+    data.skills[ci].items.splice(ii, 1);
+    renderSkillCards();
+    render();
+  }
+
+  // ── ACHIEVEMENTS ─────────────────────────────────────────────────────
+  function renderAchievementCards() {
+    const list = document.getElementById("achievements-list");
+    list.innerHTML = "";
+
+    data.achievements.forEach((a, i) => {
+      const row = document.createElement("div");
+      row.className = "bullet-item" + (a.enabled ? "" : " disabled-bullet");
+      row.style.marginBottom = "6px";
+
+      row.innerHTML = `
+        <textarea
+          rows="2"
+          style="flex:1;background:transparent;border:none;color:${a.enabled ? "#e2e8f0" : "#718096"};font-size:12px;font-family:inherit;line-height:1.45;resize:none;padding:4px 2px;outline:none;min-height:36px;overflow:hidden;${a.enabled ? "" : "text-decoration:line-through;"}"
+          oninput="data.achievements[${i}].text=this.value;autoGrow(this);render()"
+          onfocus="autoGrow(this)"
+        >${esc(a.text)}</textarea>
+
+        <div class="bullet-actions">
+          <button
+            class="btn-toggle-bullet ${a.enabled ? "is-enabled" : "is-disabled"}"
+            onclick="toggleAchievement(${i})"
+            title="${a.enabled ? "Hide from resume" : "Show on resume"}"
+          >
+            ${a.enabled ? "ON" : "OFF"}
+          </button>
+
+          <button class="btn-remove" onclick="removeAchievement(${i})" title="Delete">✕</button>
+        </div>
+      `;
+
+      list.appendChild(row);
+      setTimeout(() => autoGrow(row.querySelector("textarea")), 0);
+    });
+  }
+
+  function toggleAchievement(i) {
+    data.achievements[i].enabled = !data.achievements[i].enabled;
+    renderAchievementCards();
+    render();
+  }
+
+  function addAchievement() {
+    data.achievements.push({ text: "", enabled: true });
+    renderAchievementCards();
+    render();
+  }
+
+  function removeAchievement(i) {
+    data.achievements.splice(i, 1);
+    renderAchievementCards();
+    render();
+  }
+
+  // ── SYNC BASICS ──────────────────────────────────────────────────────
+  function syncBasics() {
+    data.name = document.getElementById("f-name").value;
+    data.phone = document.getElementById("f-phone").value;
+    data.email = document.getElementById("f-email").value;
+    data.emailClickable = document.getElementById("f-email-clickable").checked;
+
+    data.github = {
+      label: document.getElementById("f-github-label").value,
+      url: document.getElementById("f-github-url").value
+    };
+
+    data.linkedin = {
+      label: document.getElementById("f-linkedin-label").value,
+      url: document.getElementById("f-linkedin-url").value
+    };
+
+    data.portfolio = {
+      label: document.getElementById("f-portfolio-label").value,
+      url: document.getElementById("f-portfolio-url").value
+    };
+
+    data.summary = document.getElementById("f-summary").value;
+    data.showSummary = document.getElementById("f-summary-toggle").checked;
+    data.showAchievements = document.getElementById("f-achievements-toggle").checked;
+    data.showInternship = document.getElementById("f-internship-toggle").checked;
+
+    data.education.degree = document.getElementById("f-degree").value;
+    data.education.major = document.getElementById("f-major").value;
+    data.education.university = document.getElementById("f-university").value;
+    data.education.cgpa = document.getElementById("f-cgpa").value;
+    data.education.dates = document.getElementById("f-edu-dates").value;
+  }
+
+  // ── RENDER RESUME ────────────────────────────────────────────────────
+  function render() {
+    syncBasics();
+
+    // SAVE latest data on every render
+    saveToLocalStorage();
+
+    document.getElementById("summary-field").classList.toggle("toggle-disabled", !data.showSummary);
+    document.getElementById("r-name").textContent = data.name;
+
+    const emailPart = data.email
+      ? (data.emailClickable
+          ? `<a href="mailto:${esc(data.email)}" style="color:#1F4E79;text-decoration:none;">${esc(data.email)}</a>`
+          : esc(data.email))
+      : "";
+
+    let contact = [data.phone, emailPart].filter(Boolean).join("  |  ");
+
+    if (data.github.url) {
+      contact += `  |  <a href="${esc(data.github.url)}" style="color:#1F4E79;text-decoration:none;">${esc(data.github.label || data.github.url)}</a>`;
+    } else if (data.github.label) {
+      contact += `  |  ${esc(data.github.label)}`;
+    }
+
+    if (data.linkedin.url) {
+      contact += `  |  <a href="${esc(data.linkedin.url)}" style="color:#1F4E79;text-decoration:none;">${esc(data.linkedin.label || data.linkedin.url)}</a>`;
+    } else if (data.linkedin.label) {
+      contact += `  |  ${esc(data.linkedin.label)}`;
+    }
+
+    if (data.portfolio.url) {
+      contact += `  |  <a href="${esc(data.portfolio.url)}" style="color:#1F4E79;text-decoration:none;">${esc(data.portfolio.label || data.portfolio.url)}</a>`;
+    } else if (data.portfolio.label) {
+      contact += `  |  ${esc(data.portfolio.label)}`;
+    }
+
+    document.getElementById("r-contact").innerHTML = contact;
+
+    const sb = document.getElementById("r-summary-block");
+    if (data.showSummary && data.summary.trim()) {
+      sb.style.display = "";
+      document.getElementById("r-summary").textContent = data.summary;
+    } else {
+      sb.style.display = "none";
+    }
+
+    document.getElementById("r-skills").innerHTML = data.skills
+      .filter(cat => cat.items.length > 0)
+      .map(cat => `<div class="r-skill-row"><span class="r-skill-label">${esc(cat.label)}: </span>${cat.items.map(esc).join(", ")}</div>`)
+      .join("");
+
+    function jobHTML(job) {
+      return `
+        <div class="r-job">
+          <div class="r-job-header">
+            <div>
+              <span class="r-job-title">${esc(job.title)}</span>
+              <span style="color:#555;font-size:8.5pt"> &nbsp;|&nbsp; </span>
+              <span class="r-company">${esc(job.company)}</span>
+            </div>
+            <div class="r-job-meta">${esc(job.location)}  |  ${esc(job.dates)}</div>
+          </div>
+          <ul class="r-bullets">
+            ${job.bullets.filter(b => b.enabled && b.text.trim()).map(b => `<li>${esc(b.text)}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    }
+
+    const fulltimeJobs = data.jobs.filter(j => (j.type || "full-time") === "full-time");
+    const internshipJobs = data.jobs.filter(j => (j.type || "full-time") === "internship");
+
+    const ftBlock = document.getElementById("r-fulltime-block");
+    const inBlock = document.getElementById("r-internship-block");
+
+    if (fulltimeJobs.length > 0) {
+      ftBlock.style.display = "";
+      document.getElementById("r-fulltime").innerHTML = fulltimeJobs.map(jobHTML).join("");
+    } else {
+      ftBlock.style.display = "none";
+    }
+
+    if (internshipJobs.length > 0 && data.showInternship) {
+      inBlock.style.display = "";
+      document.getElementById("r-internship").innerHTML = internshipJobs.map(jobHTML).join("");
+    } else {
+      inBlock.style.display = "none";
+    }
+
+    const edu = data.education;
+    document.getElementById("r-education").innerHTML = `
+      <div class="r-edu">
+        <div class="r-edu-header">
+          <span class="r-edu-degree">${esc(edu.degree)} – ${esc(edu.major)}</span>
+          <span class="r-edu-dates">${esc(edu.dates)}</span>
+        </div>
+        <div class="r-edu-school">${esc(edu.university)}${edu.cgpa ? "  |  CGPA: " + esc(edu.cgpa) : ""}</div>
+      </div>
+    `;
+
+    document.getElementById("achievements-field").classList.toggle("toggle-disabled", !data.showAchievements);
+
+    const activeAchievements = data.achievements.filter(a => a.enabled && a.text.trim());
+    const achBlock = document.getElementById("r-achievements-block");
+
+    if (data.showAchievements && activeAchievements.length > 0) {
+      achBlock.style.display = "";
+      document.getElementById("r-achievements").innerHTML = activeAchievements
+        .map(a => `<li>${esc(a.text)}</li>`)
+        .join("");
+    } else {
+      achBlock.style.display = "none";
+    }
+  }
+
+  // ── IMPORT / EXPORT ──────────────────────────────────────────────────
+  function exportJSON() {
+    syncBasics();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "resume_data.json";
+    a.click();
+  }
+
+  function importJSON(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = ev => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        data = normalizeImportedData(parsed);
+
+        saveToLocalStorage();
+        populateSidebar();
+        render();
+      } catch (err) {
+        console.error(err);
+        alert("Invalid JSON file.");
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  loadFromLocalStorage();
+  populateSidebar();
+  render();
+</script>
    </body>
 </html>
