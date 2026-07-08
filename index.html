@@ -125,6 +125,7 @@
          .r-company { color: #1F4E79; font-weight: 700; font-size: 9pt; }
          .r-bullets { margin: 3px 0 0 14px; padding: 0; }
          .r-bullets li { font-size: 9pt; margin-bottom: 2px; list-style-type: disc; }
+         .r-tech-stack { font-size: 8.5pt; margin: 2px 0 3px 0; color: #333; }
          .r-edu { margin-top: 7px; }
          .r-edu-header { display: flex; justify-content: space-between; }
          .r-edu-degree { font-weight: 700; font-size: 9.5pt; }
@@ -252,6 +253,14 @@
                               <option value="full-time" selected="">Full-Time</option>
                               <option value="internship">Internship</option>
                            </select>
+                        </div>
+                        <div class="field"><label>Tech Stack</label><input value="React Native, React.js, TypeScript, Redux, JavaScript, Phaser.js" oninput="data.jobs[0].techStack=this.value;render()"></div>
+                        <div class="toggle-row">
+                           <span>Show tech stack</span>
+                           <label class="toggle">
+                           <input type="checkbox" checked oninput="data.jobs[0].showTechStack=this.checked;render()">
+                           <span class="toggle-slider"></span>
+                           </label>
                         </div>
                         <div class="field">
                            <label>Bullet Points <span style="color:#4a5568;font-weight:400;text-transform:none;font-size:10px;">— drag ⠿ to reorder</span></label>
@@ -821,6 +830,8 @@
         location: "Bangalore, India",
         dates: "Aug 2024 – May 2026",
         type: "full-time",
+        techStack: "React Native, React.js, TypeScript, Redux, JavaScript, Phaser.js",
+        showTechStack: true,
         bullets: [
           { text: "Designed and developed reusable UI components from scratch for an AI-based shopping application (SLAP), including Styledrops, Social Finds, Conversation History, and Checkout flows, using React Native with API integration.", enabled: true },
           { text: "Built the Offers UI on the product page with lead and contract flows, integrating backend APIs and writing test procedures to validate functionality.", enabled: true },
@@ -945,6 +956,8 @@
       location: job?.location || "Location",
       dates: job?.dates || "Month YYYY – Month YYYY",
       type: job?.type || "full-time",
+      techStack: job?.techStack || "",
+      showTechStack: job?.showTechStack !== false,
       bullets: Array.isArray(job?.bullets)
         ? job.bullets.map(b => typeof b === "string" ? { text: b, enabled: true } : { text: b.text || "", enabled: b.enabled !== false })
         : [{ text: "", enabled: true }]
@@ -1040,6 +1053,18 @@
             <option value="full-time" ${(job.type || "full-time") === "full-time" ? "selected" : ""}>Full-Time</option>
             <option value="internship" ${(job.type || "full-time") === "internship" ? "selected" : ""}>Internship</option>
           </select>
+        </div>
+
+        <div class="field"><label>Tech Stack</label>
+          <input value="${esc(job.techStack || "")}" oninput="data.jobs[${i}].techStack=this.value;render()" />
+        </div>
+
+        <div class="toggle-row">
+          <span>Show tech stack</span>
+          <label class="toggle">
+          <input type="checkbox" ${job.showTechStack !== false ? "checked" : ""} oninput="data.jobs[${i}].showTechStack=this.checked;render()">
+          <span class="toggle-slider"></span>
+          </label>
         </div>
 
         <div class="field">
@@ -1174,6 +1199,8 @@
       location: "Location",
       dates: "Month YYYY – Month YYYY",
       type: "full-time",
+      techStack: "",
+      showTechStack: true,
       bullets: [{ text: "", enabled: true }]
     });
     renderJobCards();
@@ -1404,6 +1431,7 @@
             </div>
             <div class="r-job-meta">${esc(job.location)}  |  ${esc(job.dates)}</div>
           </div>
+          ${job.showTechStack !== false && job.techStack && job.techStack.trim() ? `<div class="r-tech-stack"><em><strong>Tech Stack:</strong> ${esc(job.techStack)}</em></div>` : ""}
           <ul class="r-bullets">
             ${job.bullets.filter(b => b.enabled && b.text.trim()).map(b => `<li>${esc(b.text)}</li>`).join("")}
           </ul>
