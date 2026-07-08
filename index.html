@@ -243,6 +243,13 @@
                            <span class="card-title">Flipkart</span>
                            <button class="btn-remove" onclick="removeJob(0)" title="Remove job">✕</button>
                         </div>
+                        <div class="toggle-row">
+                           <span>Show this experience</span>
+                           <label class="toggle">
+                           <input type="checkbox" checked oninput="data.jobs[0].includeInResume=this.checked;render()">
+                           <span class="toggle-slider"></span>
+                           </label>
+                        </div>
                         <div class="field"><label>Title</label><input value="Application Engineer" oninput="data.jobs[0].title=this.value;render();updateCardTitle(0)"></div>
                         <div class="field"><label>Company</label><input value="Flipkart" oninput="data.jobs[0].company=this.value;render();updateCardTitle(0)"></div>
                         <div class="field"><label>Location</label><input value="Bangalore, India" oninput="data.jobs[0].location=this.value;render()"></div>
@@ -832,6 +839,7 @@
         type: "full-time",
         techStack: "React Native, React.js, TypeScript, Redux, JavaScript, Phaser.js",
         showTechStack: true,
+        includeInResume: true,
         bullets: [
           { text: "Designed and developed reusable UI components from scratch for an AI-based shopping application (SLAP), including Styledrops, Social Finds, Conversation History, and Checkout flows, using React Native with API integration.", enabled: true },
           { text: "Built the Offers UI on the product page with lead and contract flows, integrating backend APIs and writing test procedures to validate functionality.", enabled: true },
@@ -958,6 +966,7 @@
       type: job?.type || "full-time",
       techStack: job?.techStack || "",
       showTechStack: job?.showTechStack !== false,
+      includeInResume: job?.includeInResume !== false,
       bullets: Array.isArray(job?.bullets)
         ? job.bullets.map(b => typeof b === "string" ? { text: b, enabled: true } : { text: b.text || "", enabled: b.enabled !== false })
         : [{ text: "", enabled: true }]
@@ -1026,6 +1035,14 @@
         <div class="card-header">
           <span class="card-title">${esc(job.company) || "Job " + (i + 1)}</span>
           <button class="btn-remove" onclick="removeJob(${i})" title="Remove job">✕</button>
+        </div>
+
+        <div class="toggle-row">
+          <span>Show this entry</span>
+          <label class="toggle">
+          <input type="checkbox" ${job.includeInResume !== false ? "checked" : ""} oninput="data.jobs[${i}].includeInResume=this.checked;render()">
+          <span class="toggle-slider"></span>
+          </label>
         </div>
 
         <div class="field"><label>Title</label>
@@ -1201,6 +1218,7 @@
       type: "full-time",
       techStack: "",
       showTechStack: true,
+      includeInResume: true,
       bullets: [{ text: "", enabled: true }]
     });
     renderJobCards();
@@ -1439,8 +1457,8 @@
       `;
     }
 
-    const fulltimeJobs = data.jobs.filter(j => (j.type || "full-time") === "full-time");
-    const internshipJobs = data.jobs.filter(j => (j.type || "full-time") === "internship");
+    const fulltimeJobs = data.jobs.filter(j => (j.type || "full-time") === "full-time" && j.includeInResume !== false);
+    const internshipJobs = data.jobs.filter(j => (j.type || "full-time") === "internship" && j.includeInResume !== false);
 
     const ftBlock = document.getElementById("r-fulltime-block");
     const inBlock = document.getElementById("r-internship-block");
