@@ -86,12 +86,19 @@
          .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
          .toggle-disabled { opacity: 0.4; pointer-events: none; }
          /* Skill cards */
-         .skill-card { background: #252d3d; border: 1px solid #2d3748; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+         .skill-card { background: #252d3d; border: 1px solid #2d3748; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; transition: opacity 0.15s; }
+         .skill-card.dragging-card { opacity: 0.35; }
          .skill-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+         .drag-handle-cat { cursor: grab; color: #718096; font-size: 15px; padding: 2px 3px; line-height: 1; flex-shrink: 0; user-select: none; transition: color 0.15s; }
+         .drag-handle-cat:hover { color: #63b3ed; }
+         .drag-handle-cat:active { cursor: grabbing; }
          .skill-cat-input { flex: 1; background: #1a1f2e; border: 1px solid #4a5568; color: #63b3ed; padding: 5px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; font-family: inherit; }
          .skill-cat-input:focus { outline: none; border-color: #63b3ed; }
          .skill-items { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
-         .skill-tag { display: flex; align-items: center; gap: 4px; background: #2d3748; border: 1px solid #4a5568; border-radius: 14px; padding: 3px 8px 3px 10px; }
+         .skill-tag { display: flex; align-items: center; gap: 4px; background: #2d3748; border: 1px solid #4a5568; border-radius: 14px; padding: 3px 8px 3px 10px; cursor: grab; transition: opacity 0.15s, border-color 0.15s, background 0.15s; }
+         .skill-tag:active { cursor: grabbing; }
+         .skill-tag.dragging { opacity: 0.35; }
+         .skill-tag.drag-over { border-color: #63b3ed; background: #1e3a5f; }
          .skill-tag span { font-size: 12px; color: #e2e8f0; }
          .skill-tag button { background: none; border: none; color: #718096; cursor: pointer; font-size: 13px; line-height: 1; padding: 0; transition: color 0.15s; }
          .skill-tag button:hover { color: #fc8181; }
@@ -230,13 +237,6 @@
                </div>
                <!-- EXPERIENCE -->
                <div id="panel-experience" class="panel">
-                  <div class="toggle-row" style="margin-bottom:14px;">
-                     <span>Show internship section</span>
-                     <label class="toggle">
-                     <input type="checkbox" id="f-internship-toggle" checked="" onchange="render()">
-                     <span class="toggle-slider"></span>
-                     </label>
-                  </div>
                   <div id="jobs-list">
                      <div class="card">
                         <div class="card-header">
@@ -713,54 +713,6 @@
                      </div>
                   </div>
                </div>
-               <div id="r-internship-block">
-                  <div class="r-section">Internship Experience</div>
-                  <div id="r-internship">
-                     <div class="r-job">
-                        <div class="r-job-header">
-                           <div>
-                              <span class="r-job-title">Frontend Developer Intern</span>
-                              <span style="color:#555;font-size:8.5pt"> &nbsp;|&nbsp; </span>
-                              <span class="r-company">Aquera</span>
-                           </div>
-                           <div class="r-job-meta">Bangalore, India  |  Mar 2024 – Aug 2024</div>
-                        </div>
-                        <ul class="r-bullets">
-                           <li>Built dynamic components for an Asset Management System using Angular, enabling efficient tracking and management workflows.</li>
-                           <li>Designed an Access Request Module to automate provisioning task workflows, enforce access controls, and reduce operational overhead.</li>
-                           <li>Modernized the Adminui-Facelift by updating the visual design and usability of outdated UI elements, improving the overall user experience.</li>
-                        </ul>
-                     </div>
-                     <div class="r-job">
-                        <div class="r-job-header">
-                           <div>
-                              <span class="r-job-title">Software Engineer Intern</span>
-                              <span style="color:#555;font-size:8.5pt"> &nbsp;|&nbsp; </span>
-                              <span class="r-company">Economize, Inc.</span>
-                           </div>
-                           <div class="r-job-meta">Remote  |  Mar 2023 – Nov 2023</div>
-                        </div>
-                        <ul class="r-bullets">
-                           <li>Redesigned and built responsive frontend pages using Vue.js and Tailwind CSS, improving UI consistency and layout responsiveness.</li>
-                           <li>Integrated Strapi CMS for data fetching and management, streamlining content retrieval in the frontend application.</li>
-                           <li>Identified and resolved website bugs; conducted functional testing using Selenium IDE to verify fixes and improve software reliability.</li>
-                        </ul>
-                     </div>
-                     <div class="r-job">
-                        <div class="r-job-header">
-                           <div>
-                              <span class="r-job-title">Web Development Intern</span>
-                              <span style="color:#555;font-size:8.5pt"> &nbsp;|&nbsp; </span>
-                              <span class="r-company">Nifty Zone Pte Ltd</span>
-                           </div>
-                           <div class="r-job-meta">Remote  |  Sept 2022 – Nov 2022</div>
-                        </div>
-                        <ul class="r-bullets">
-                           <li>Maintained and improved a responsive blog website using React, Next.js, Astro, Tailwind CSS, and Chakra UI.</li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
                <div class="r-section">Education</div>
                <div id="r-education">
                   <div class="r-edu">
@@ -818,7 +770,6 @@
 
     showSummary: true,
     showAchievements: true,
-    showInternship: true,
 
     summary:
       "Software Engineer with nearly 2 years of full-time experience building and debugging production software across cross-platform environments. Skilled in C/C++, JavaScript, and TypeScript with a strong foundation in software engineering concepts, data structures, and algorithms. Experienced in developing software solutions, writing technical documentation, troubleshooting defects, and collaborating with internal stakeholders to gather and clarify requirements.",
@@ -919,7 +870,6 @@
     cloned.emailClickable = cloned.emailClickable !== false;
     cloned.showSummary = cloned.showSummary !== false;
     cloned.showAchievements = cloned.showAchievements !== false;
-    cloned.showInternship = cloned.showInternship !== false;
     cloned.summary = cloned.summary || "";
 
     // social links migration / safety
@@ -1009,7 +959,6 @@
     document.getElementById("f-summary").value = data.summary;
     document.getElementById("f-summary-toggle").checked = data.showSummary;
     document.getElementById("f-achievements-toggle").checked = data.showAchievements !== false;
-    document.getElementById("f-internship-toggle").checked = data.showInternship !== false;
 
     document.getElementById("f-degree").value = data.education.degree;
     document.getElementById("f-major").value = data.education.major;
@@ -1239,9 +1188,11 @@
     data.skills.forEach((cat, ci) => {
       const card = document.createElement("div");
       card.className = "skill-card";
+      card.dataset.ci = ci;
 
       card.innerHTML = `
         <div class="skill-card-header">
+          <span class="drag-handle-cat" draggable="true" title="Drag to reorder this whole category">⠿</span>
           <input
             class="skill-cat-input"
             value="${esc(cat.label)}"
@@ -1252,10 +1203,10 @@
         </div>
 
         <div class="skill-items" id="skill-items-${ci}">
-          ${cat.items.map((item, ii) => `
-            <span class="skill-tag">
+          ${cat.items.map((item) => `
+            <span class="skill-tag" draggable="true">
               <span>${esc(item)}</span>
-              <button onclick="removeSkillItem(${ci},${ii})">✕</button>
+              <button onclick="removeSkillItemByText(${ci}, this)">✕</button>
             </span>
           `).join("")}
         </div>
@@ -1267,7 +1218,130 @@
       `;
 
       list.appendChild(card);
+      attachSkillDragHandlers(ci);
     });
+
+    attachCategoryDragHandlers();
+  }
+
+  // Find the element to insert the dragged node before, based on cursor position.
+  function getDragAfterElement(container, x, y, selector) {
+    const els = [...container.querySelectorAll(selector + ":not(.dragging)")];
+
+    return els.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const withinRow = y >= box.top - 4 && y <= box.bottom + 4;
+      const offset = x - box.left - box.width / 2;
+
+      if (withinRow && offset < 0 && offset > closest.offset) {
+        return { offset, element: child };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+  }
+
+  // ── SKILL PILL DRAG (reorder within a category) ────────────────────────
+  function attachSkillDragHandlers(ci) {
+    const container = document.getElementById(`skill-items-${ci}`);
+    if (!container) return;
+
+    container.querySelectorAll(".skill-tag").forEach(tag => {
+      tag.addEventListener("dragstart", e => {
+        e.stopPropagation();
+        tag.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      tag.addEventListener("dragend", () => {
+        tag.classList.remove("dragging");
+        commitSkillItemOrder(ci);
+      });
+    });
+
+    container.addEventListener("dragover", e => {
+      const dragging = container.querySelector(".skill-tag.dragging");
+      if (!dragging) return;
+      e.preventDefault();
+
+      const afterEl = getDragAfterElement(container, e.clientX, e.clientY, ".skill-tag");
+      if (afterEl == null) {
+        container.appendChild(dragging);
+      } else {
+        container.insertBefore(dragging, afterEl);
+      }
+    });
+  }
+
+  function commitSkillItemOrder(ci) {
+    const container = document.getElementById(`skill-items-${ci}`);
+    if (!container) return;
+    const newOrder = [...container.querySelectorAll(".skill-tag > span:first-child")].map(s => s.textContent);
+    data.skills[ci].items = newOrder;
+    render();
+  }
+
+  function removeSkillItemByText(ci, btn) {
+    const tag = btn.closest(".skill-tag");
+    const text = tag.querySelector("span").textContent;
+    const idx = data.skills[ci].items.indexOf(text);
+    if (idx > -1) data.skills[ci].items.splice(idx, 1);
+    renderSkillCards();
+    render();
+  }
+
+  // ── SKILL CATEGORY DRAG (reorder whole sections) ────────────────────────
+  function attachCategoryDragHandlers() {
+    const list = document.getElementById("skills-list");
+
+    list.querySelectorAll(".skill-card").forEach(card => {
+      const handle = card.querySelector(".drag-handle-cat");
+
+      handle.addEventListener("dragstart", e => {
+        card.classList.add("dragging-card");
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      handle.addEventListener("dragend", () => {
+        card.classList.remove("dragging-card");
+        commitSkillCategoryOrder();
+      });
+    });
+
+    list.addEventListener("dragover", e => {
+      const dragging = list.querySelector(".skill-card.dragging-card");
+      if (!dragging) return;
+      e.preventDefault();
+
+      const afterEl = getDragAfterElementVertical(list, e.clientY, ".skill-card");
+      if (afterEl == null) {
+        list.appendChild(dragging);
+      } else {
+        list.insertBefore(dragging, afterEl);
+      }
+    });
+  }
+
+  function getDragAfterElementVertical(container, y, selector) {
+    const els = [...container.querySelectorAll(selector + ":not(.dragging-card)")];
+
+    return els.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, element: child };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+  }
+
+  function commitSkillCategoryOrder() {
+    const list = document.getElementById("skills-list");
+    const cards = [...list.querySelectorAll(".skill-card")];
+    const newOrder = cards.map(card => data.skills[parseInt(card.dataset.ci)]);
+    data.skills = newOrder;
+    renderSkillCards();
+    render();
   }
 
   function addSkillCategory() {
@@ -1378,7 +1452,6 @@
     data.summary = document.getElementById("f-summary").value;
     data.showSummary = document.getElementById("f-summary-toggle").checked;
     data.showAchievements = document.getElementById("f-achievements-toggle").checked;
-    data.showInternship = document.getElementById("f-internship-toggle").checked;
 
     data.education.degree = document.getElementById("f-degree").value;
     data.education.major = document.getElementById("f-major").value;
@@ -1457,24 +1530,15 @@
       `;
     }
 
-    const fulltimeJobs = data.jobs.filter(j => (j.type || "full-time") === "full-time" && j.includeInResume !== false);
-    const internshipJobs = data.jobs.filter(j => (j.type || "full-time") === "internship" && j.includeInResume !== false);
+    const allJobs = data.jobs.filter(j => j.includeInResume !== false);
 
     const ftBlock = document.getElementById("r-fulltime-block");
-    const inBlock = document.getElementById("r-internship-block");
 
-    if (fulltimeJobs.length > 0) {
+    if (allJobs.length > 0) {
       ftBlock.style.display = "";
-      document.getElementById("r-fulltime").innerHTML = fulltimeJobs.map(jobHTML).join("");
+      document.getElementById("r-fulltime").innerHTML = allJobs.map(jobHTML).join("");
     } else {
       ftBlock.style.display = "none";
-    }
-
-    if (internshipJobs.length > 0 && data.showInternship) {
-      inBlock.style.display = "";
-      document.getElementById("r-internship").innerHTML = internshipJobs.map(jobHTML).join("");
-    } else {
-      inBlock.style.display = "none";
     }
 
     const edu = data.education;
